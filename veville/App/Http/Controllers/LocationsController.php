@@ -95,6 +95,7 @@ class LocationsController extends Controller
             ->where('locations.id_agency', '=', $id)
             ->get();
         $agencies = Agencies::all();
+
         return view('locations', compact('locations', 'agencies'));
     }
 
@@ -118,9 +119,17 @@ class LocationsController extends Controller
             ->where('images.id_location', '=', $id)
             ->get();
 
+        $contacts = DB::table('agents')
+            ->join('locations', 'locations.id_location', '=', 'agents.id_location')
+            ->join('users', 'users.id', '=', 'agents.id_user')
+            ->join('agencies', 'agencies.id_agency', '=', 'agents.id_agency')
+            ->select('locations.*', 'agents.*', 'users.*', 'agencies.*')
+            ->where('agents.id_location', '=', $id)
+            ->get();
 
 
-        return view('locationsShow', compact('locations', 'images'));
+
+        return view('locationsShow', compact('locations', 'images', 'contacts'));
     }
 
     /**

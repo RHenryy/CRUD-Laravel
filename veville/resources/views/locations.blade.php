@@ -1,20 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Nos Appartements à la location</h1> <br />
+    <h1>Nos Appartements à la location</h1>
 
-    <h2 style="color:green;font-weight:bold;text-align:center">{{ session('msg') }}</h2><br />
+    <h2 style="color:green;font-weight:bold;text-align:center">{{ session('msg') }}</h2>
+    <div class="container">
+        <select id="agence" class="w-50 form-select container" name="v_agency" id="v_agency"
+            onchange="location = this.value">
+            <option hidden value="">Filter by city</option>
+            <option value="/locations">All cities</option>
+            @foreach ($agencies as $agence)
+                <option value="/locations/{{ $agence->id_agency }}">
+                    {{ $agence->city }}
+                </option>
+            @endforeach
+        </select>
 
-    <select id="agence" class=" w-50 form-select container" name="v_agency" id="v_agency" onchange="location = this.value">
-        <option hidden value="">Filter by city</option>
-        <option value="/locations">All cities</option>
-        @foreach ($agencies as $agence)
-            <option value="/locations/{{ $agence->id_agency }}">
-           {{ $agence->city }}
-            </option>
-        @endforeach
-    </select>
-    <br />
+        <div class="flexAnnonces">
+            @foreach ($locations as $location)
+                <div style="width:45%;margin: 0 auto;" class="cardBackgroundColor pb-3 pt-5 mb-5">
+                    <img class="rounded d-block mx-auto mb-2" style="width:90%;border:3px solid black;height:250px"
+                        src="{{ Storage::url($location->photo) }}">
+                    <p class="text-center h4 mt-3 mb-3"><strong>{{ $location->city }} - {{ $location->title_location }} -
+                            {{ $location->rent_price }}€</strong></p>
+                    <div class="text-center">
+                        <a href="/locations/show/{{ $location->id_location }}"
+                            class="text-center mb-4 btn btn-primary btn-block p-3">Louez dès maintenant!</a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    {{-- <br />
     <table class="agency center">
         <tr>
             <th>Appartement</th>
@@ -38,6 +55,5 @@
                 <td> <img style="width: 50%" src="{{ Storage::url($location->photo) }}"> </td>
             </tr>
         @endforeach
-    </table><br />
-
+    </table><br /> --}}
 @endsection

@@ -13,6 +13,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/night-mode.js') }}" defer></script>
     <script src="{{ asset('js/carousel.js') }}" defer></script>
+    <script src="{{ asset('js/modal.js') }}" defer></script>
     <script src="https://kit.fontawesome.com/82b9f37ffc.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
@@ -47,20 +48,34 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="navbar-brand" href="/">Toutes nos locations</a></li>
-                        <li class="nav-item"><a class="navbar-brand" href="/agencies">Nos agences</a></li>
-                        <li class="nav-item"><a class="navbar-brand" href="/locations">Nos appartments</a></li>
+                        @guest
+                            <li class="nav-item"><a class="navbar-brand" href="/">Toutes nos locations</a></li>
+                            <li class="nav-item"><a class="navbar-brand" href="/agencies">Nos agences</a></li>
+                            <li class="nav-item"><a class="navbar-brand" href="/locations">Nos appartments</a></li>
+                        @endguest
+                        @if (Auth::user() && Auth::user()->role === 1)
+                            <li class="nav-item"><a class="navbar-brand" href="/">Toutes nos locations</a></li>
+                            <li class="nav-item"><a class="navbar-brand" href="/admin/agencies">Nos agences</a>
+                            </li>
+                            <li class="nav-item"><a class="navbar-brand" href="/admin/locations">Nos
+                                    appartments</a>
+                            </li>
+                        @endif
+                        @if (Auth::check() && Auth::user()->role === 2)
+                            <li class="nav-item"><a class="navbar-brand" href="/">Toutes nos locations</a></li>
+                            <li class="nav-item"><a class="navbar-brand" href="/agent/agencies">Votre
+                                    agence</a>
+                            </li>
+                            <li class="nav-item"><a class="navbar-brand" href="/agent/locations">Vos
+                                    annonces</a></li>
+                            <li class="nav-item"><a class="navbar-brand" href="/agent/messages/"
+                                    {{ Auth::user()->id }}>Vos Rendez-Vous</a></li>
+                        @endif
                         @if (Auth::user() && Auth::user()->role == 1)
                             <li class="nav-item"><a class="navbar-brand" href="/admin/members">Les membres</a>
                             </li>
                             <li class="nav-item"><a class="navbar-brand" href="/admin/orders">Orders</a></li>
                         @endif
-                        @if (Auth::user() && Auth::user()->role == 2)
-                            <li class="nav-item"><a class="navbar-brand" href="/agent/messages/"
-                                    {{ Auth::user()->id }}>Vos Rendez-Vous</a></li>
-                        @endif
-
-
 
                     </ul>
 
@@ -80,11 +95,11 @@
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
-                            <div id="nightmode">
+                            {{-- <div id="nightmode">
                                 <li class="nav-item">
                                     XXXX
                                 </li>
-                            </div>
+                            </div> --}}
                         @else
                             {{-- <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link" href="#" role="button"
@@ -99,8 +114,9 @@
                                         style="color: blue">{{ Auth::user()->name }}!</span></a>
                             </li>
                             <li>
-                                <a class="navbar-brand" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                                        document.getElementById('logout-form').submit();">
+                                <a class="navbar-brand" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                                                                                                                    document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
                             </li>

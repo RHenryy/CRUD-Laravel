@@ -82,8 +82,6 @@ Route::prefix('agent')->middleware(['auth', 'isAgent'])->group(function () {
     Route::post('/messages/archive/{id}', [ContactController::class, 'archiveMessage']);
     Route::get('/messages/archives/{id}', [ContactController::class, 'showArchives']);
     Route::post('/messages/restore/{id}', [ContactController::class, 'restore']);
-
-    
 });
 
 Route::get('/', [IndexController::class, 'index']);
@@ -99,14 +97,11 @@ Route::get('/home/edit/{id}', [App\Http\Controllers\HomeController::class, 'edit
 Route::post('/home/edit/{id}', [App\Http\Controllers\HomeController::class, 'update']);
 
 Route::get('/contact/{id}', [ContactController::class, 'index']);
-Route::post('/contact/{id}', [ContactController::class, 'store']);
+Route::post('/contact', [ContactController::class, 'store']);
 
 Auth::routes(['verify' => true]);
 
-Route::get('/email', function()
-{   
+Route::get('/email', function () {
     Mail::to('rafael.hhenry12345@gmail.com')->send(new WelcomeMail());
     return new WelcomeMail();
 });
-
-
