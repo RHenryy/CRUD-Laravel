@@ -99,7 +99,7 @@ table {
     margin-bottom: 3rem;
 }
 
-tr:hover {
+.agency tr:hover {
     cursor: pointer;
 }
 
@@ -113,4 +113,14 @@ tr:hover {
     max-width: 1300px;
     margin: 0 auto;
     background-image: url("");
+}
+
+.members, .members th,
+td {
+    border: 2px solid black;
+    border-collapse: collapse;
+    padding: 1rem;
+}
+.members {
+    text-align: center;
 }

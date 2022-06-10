@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->bigIncrements('id_order', 3);
-            $table->foreignId('id_member', 3)->references('id_member')->on('members')->onDelete('cascade');;
-            $table->foreignId('id_vehicle', 3)->references('id_vehicle')->on('vehicles')->onDelete('cascade');;
-            $table->foreignId('id_agency', 3)->references('id_agency')->on('agencies')->onDelete('cascade');;
+            $table->id('id_order', 3);
+            $table->foreignId('id_user', 3)->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('id_location', 3)->references('id_location')->on('locations')->onDelete('cascade');
+            $table->foreignId('id_agency', 3)->references('id_agency')->on('agencies')->onDelete('cascade');
             $table->dateTime('begin_date_time');
             $table->dateTime('end_date_time');
             $table->integer('Total Price');

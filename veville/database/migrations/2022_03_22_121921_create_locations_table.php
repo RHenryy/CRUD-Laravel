@@ -13,17 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('vehicles', function (Blueprint $table) {
-            $table->bigIncrements('id_vehicle', 3);
+        Schema::create('locations', function (Blueprint $table) {
+            $table->id('id_location', 3);
             $table->foreignId('id_agency', 3)->references('id_agency')->on('agencies')->onDelete('cascade');
-            $table->string('title', 200);
-            $table->string('brand', 50);
-            $table->string('model', 50);
-            $table->text('description');
+            $table->string('title_location', 200);
+            $table->string('description')->nullable();
+            $table->decimal('rent_price', 10, 2);
             $table->string('photo', 200);
-            $table->decimal('daily_price', 10, 2);
-            $table->dateTime('updated_at');
-            $table->dateTime('created_at');
+
+            $table->timestamps();
         });
     }
 

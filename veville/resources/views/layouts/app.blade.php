@@ -11,8 +11,14 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/night-mode.js') }}" defer></script>
+    <script src="{{ asset('js/carousel.js') }}" defer></script>
     <script src="https://kit.fontawesome.com/82b9f37ffc.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,15 +28,16 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/carousel.css') }}" rel="stylesheet">
 </head>
 
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+<body class="mt-3">
+    <div id="">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                {{-- <a class="navbar-brand" href="{{ url('/') }}">
                     Retour à nos locations
-                </a>
+                </a> --}}
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -40,11 +47,26 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="navbar-brand" href="/">Toutes nos locations</a></li>
+                        <li class="nav-item"><a class="navbar-brand" href="/agencies">Nos agences</a></li>
+                        <li class="nav-item"><a class="navbar-brand" href="/locations">Nos appartments</a></li>
+                        @if (Auth::user() && Auth::user()->role == 1)
+                            <li class="nav-item"><a class="navbar-brand" href="/admin/members">Les membres</a>
+                            </li>
+                            <li class="nav-item"><a class="navbar-brand" href="/admin/orders">Orders</a></li>
+                        @endif
+                        @if (Auth::user() && Auth::user()->role == 2)
+                            <li class="nav-item"><a class="navbar-brand" href="/agent/messages/"
+                                    {{ Auth::user()->id }}>Vos Rendez-Vous</a></li>
+                        @endif
+
+
 
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -58,35 +80,47 @@
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
+                            <div id="nightmode">
+                                <li class="nav-item">
+                                    XXXX
+                                </li>
+                            </div>
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                            {{-- <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"> --}}
+                            <li class="nav-item">
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
+                                <a class="navbar-brand" href="/home">Hello <span
+                                        style="color: blue">{{ Auth::user()->name }}!</span></a>
                             </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+                            <li>
+                                <a class="navbar-brand" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                                        document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+                            </li>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+
+                    </div>
+                    </li>
+                @endguest
+                </ul>
+            </div>
+    </div>
+    </nav>
+
+    <main class="py-4">
+        @yield('content')
+    </main>
     </div>
 
 </body>

@@ -1,27 +1,43 @@
 @extends('layouts.app')
+
 @section('content')
-    <div class="container mt-5">
-        <form class="w-50 container" action="/locations" method="post" enctype="multipart/form-data">
-            @csrf
-            <label for="photo">Photo1</label><br>
-            <input class="form-control" type="file" name="photo1" placeholder="photo"><br>
+    <h1>Nos Appartements à la location</h1> <br />
 
-            <label for="photo">Photo2</label><br>
-            <input class="form-control" type="file" name="photo2" placeholder="photo"><br>
+    <h2 style="color:green;font-weight:bold;text-align:center">{{ session('msg') }}</h2><br />
 
-            <label for="photo">Photo3</label><br>
-            <input class="form-control" type="file" name="photo3" placeholder="photo"><br>
+    <select id="agence" class=" w-50 form-select container" name="v_agency" id="v_agency" onchange="location = this.value">
+        <option hidden value="">Filter by city</option>
+        <option value="/locations">All cities</option>
+        @foreach ($agencies as $agence)
+            <option value="/locations/{{ $agence->id_agency }}">
+           {{ $agence->city }}
+            </option>
+        @endforeach
+    </select>
+    <br />
+    <table class="agency center">
+        <tr>
+            <th>Appartement</th>
+            <th>Agence</th>
+            <th>Ville</th>
+            <th>description</th>
+            <th>Loyer</th>
+            <th>photo</th>
 
-            <select class="form-select" name="v_agency" id="v_agency">
-                <option hidden value="">Choose your agency</option>
-                @foreach ($agencies as $agency)
-                    <option value="{{ $agency->id_agency }}">{{ $agency->title_agency }} - {{ $agency->city }}
-                    </option>
-                @endforeach
-            </select>
 
-            <button type="submit" class="w-100 btn btn-primary">Submit</button>
+        </tr>
 
-        </form>
-    </div>
+        @foreach ($locations as $location)
+            <tr onclick="window.location='/locations/show/{{ $location->id_location }}';">
+
+                <td> {{ $location->title_location }} </td>
+                <td> {{ $location->agency }}</td>
+                <td> {{ $location->city }}</td>
+                <td> {{ $location->description }} </td>
+                <td> {{ $location->rent_price }}€ </td>
+                <td> <img style="width: 50%" src="{{ Storage::url($location->photo) }}"> </td>
+            </tr>
+        @endforeach
+    </table><br />
+
 @endsection

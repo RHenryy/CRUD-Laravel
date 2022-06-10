@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -14,11 +15,20 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth')->except('index', 'create', 'show', 'store');
+    // }
+
     public function index()
-    {
+    {   
+        
         $users = User::all();
 
-        return view('members', compact('users'));
+        return view('admin.members', compact('users'));
+        
+        
     }
 
     /**
@@ -57,7 +67,7 @@ class UsersController extends Controller
     public function show($id)
     {
         $users = User::all();
-        return view('members', compact('users'));
+        return view('admin.members', compact('users'));
     }
 
     /**
@@ -68,12 +78,12 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $member = DB::table('members')
-            ->select('members.*')
-            ->where('id_member', 'LIKE', $id)
+        $member = DB::table('users')
+            ->select('users.*')
+            ->where('id', '=', $id)
             ->get();
 
-        return view('membersEdit', compact('member'));
+        return view('admin.membersEdit', compact('member'));
     }
 
     /**
@@ -87,45 +97,46 @@ class UsersController extends Controller
     {
 
 
-        $members = DB::table('members')
-            ->select('members.*')
-            ->where('id_member', 'LIKE', $id)
+        $members = DB::table('users')
+            ->select('users.*')
+            ->where('id', '=', $id)
             ->get();
 
         if ($request->password == null) {
             $request->password = $members[0]->password;
         } else $request->password = Hash::make($request->password);
 
-        if ($request->status == null) {
-            $request->status = $members[0]->status;
-        }
+        // if ($request->status == null) {
+        //     $request->status = $members[0]->status;
+        // }
 
-        if ($request->civility == null) {
-            $request->civility = $members[0]->civility;
-        }
+        // if ($request->civility == null) {
+        //     $request->civility = $members[0]->civility;
+        // }
 
-        $request->register_date = $members[0]->register_date;
+        $request->created_at = $members[0]->created_at;
 
 
 
-        $member = DB::table('members')
-            ->select('members.*')
-            ->where('id_member', 'LIKE', $id)
+        $member = DB::table('users')
+            ->select('users.*')
+            ->where('id', '=', $id)
             ->get();
 
 
 
-        DB::table('members')
-            ->where('id_member', 'LIKE', $id)
+        DB::table('users')
+            ->where('id', '=', $id)
             ->update([
 
-                'nickname' => $request->nickname,
-                'password' => $request->password,
-                'lastname' => $request->lastname,
-                'firstname' => $request->firstname,
-                'email' => $request->mail,
-                'civility' => $request->civility,
-                'status' => $request->status,
+                'name' => $request->name,
+                // 'password' => $request->password,
+                // 'lastname' => $request->lastname,
+                // 'firstname' => $request->firstname,
+                'email' => $request->email,
+                'role' => $request->status,
+                // 'civility' => $request->civility,
+                // 'status' => $request->status,
                 'updated_at' => date('Y-m-d H:i:s')
 
 
@@ -133,7 +144,7 @@ class UsersController extends Controller
 
             ]);
 
-        return redirect('/members');
+        return redirect('/admin/members')->with('msg', "L'utilisateur a bien été modifié");
     }
 
     /**
@@ -144,10 +155,10 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('members')
-            ->where('id_member', 'LIKE', $id)
+        DB::table('users')
+            ->where('id', '=', $id)
             ->delete();
 
-        return redirect('members');
+        return redirect('admin/members')->with('msg', 'Utilisateur bien supprimé');
     }
 }

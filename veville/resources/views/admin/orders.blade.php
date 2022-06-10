@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<h1>Consultez l'historique des locations</h1>
     <form action="/agencies" method="POST">
         @csrf
 
@@ -13,23 +14,25 @@
             @endforeach
         </select>
 
-        <table class="agency center;">
+        <table class="members center;">
             <tr>
                 <th>Commande</th>
                 <th>Membre</th>
                 <th>Vehicule</th>
                 <th>Agence</th>
-                <th>date et heure de t mor</th>
-                <th>date et heure de mor</th>
+                <th>date et heure</th>
+                <th>date et heure</th>
                 <th>Price</th>
                 <th>Date et heure d'enregistrement</th>
+
                 <th>actions</th>
+
             </tr>
             @foreach ($orders as $order)
-                <tr onclick="window.location='/vehicles/show/{{ $order->id_order }}';">
+                <tr onclick="window.location='/locations/show/{{ $order->id_order }}';">
                     <td> {{ $order->id_order }} </td>
                     <td> {{ $order->name }} - {{ $order->email }} </td>
-                    <td> {{ $order->vehicle }}</td>
+                    <td> {{ $order->location }}</td>
                     <td> {{ $order->agency }} </td>
                     <td> {{ $order->begin_date_time }} </td>
                     <td> {{ $order->end_date_time }} </td>

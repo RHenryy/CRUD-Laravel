@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agencies;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class AgenciesController extends Controller
@@ -14,19 +15,54 @@ class AgenciesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
+        if (Auth::check() && Auth::user()->role == 1) {
+            $agencies = Agencies::all();
+
+            $city = DB::table('agencies')
+                ->select('agencies.city')
+                ->groupBy('agencies.city')
+                ->get();
+
+            $autofill = "";
+            return view('admin.agencies', compact('agencies', 'city', 'autofill'));
+        }
+
+        if (Auth::check() && Auth::user()->role == 2) {
+            $agencies = DB::table('agencies')
+                ->join('agents', 'agents.id_agency', '=', 'agencies.id_agency')
+                ->join('users', 'users.id', '=', 'agents.id_user')
+                ->select('agencies.*')
+                ->where('agents.id_user', '=', Auth::user()->id)
+                ->get();
+
+            return view('agent.agencies', compact('agencies'));
+        }
+
         $agencies = Agencies::all();
 
-
-
         $city = DB::table('agencies')
-            ->select('agencies.city')
-            ->groupBy('agencies.city')
+            ->select('agencies.city', 'agencies.title_agency')
+            // ->groupBy('agencies.city')
             ->get();
 
         $autofill = "";
         return view('agencies', compact('agencies', 'city', 'autofill'));
+    }
+
+    public function adminIndex()
+    {
+        $agencies = Agencies::all();
+
+        $city = DB::table('agencies')
+            ->select('agencies.city', 'agencies.title_agency')
+            // ->groupBy('agencies.city')
+            ->get();
+
+        $autofill = "";
+        return view('admin.agencies', compact('agencies', 'city', 'autofill'));
     }
 
     /**
@@ -67,7 +103,7 @@ class AgenciesController extends Controller
         ]);
 
 
-        return redirect('/agencies')->with('msg', 'Votre agence a bien été ajoutée!');
+        return redirect('/admin/agencies')->with('msg', 'Votre agence a bien été ajoutée!');
     }
 
 
@@ -89,8 +125,8 @@ class AgenciesController extends Controller
             ->get();
 
         $city = DB::table('agencies')
-            ->select('agencies.city')
-            ->groupBy('agencies.city')
+            ->select('agencies.city', 'agencies.title_agency')
+            // ->groupBy('agencies.city')
             ->get();
 
 
@@ -135,12 +171,17 @@ class AgenciesController extends Controller
      */
     public function edit($id)
     {
-        $agencies = DB::table('agencies')
-            ->select('agencies.*')
-            ->where('id_agency', 'LIKE', $id)
-            ->get();
+        if (Auth::check() && Auth::user()->role === 1) {
+            $agencies = DB::table('agencies')
+                ->select('agencies.*')
+                ->where('id_agency', 'LIKE', $id)
+                ->get();
 
-        return view('agenciesEdit', compact('agencies'));
+            return view('admin.agenciesEdit', compact('agencies'));
+        }
+
+        else abort(403);
+
     }
 
     /**
@@ -186,8 +227,11 @@ class AgenciesController extends Controller
 
 
             ]);
-
-        return redirect('/agencies')->with('msg', 'Entry successfully updated!');
+        if (Auth::check() && Auth::user()->role === 1) {
+            return redirect('/admin/agencies')->with('msg', "L'annonce a bien été modifiée!");
+        } elseif (Auth::check() && Auth::user()->role === 2) {
+            return redirect('/agent/agencies')->with('msg', "L'annonce a bien été modifiée!");
+        }
     }
 
     /**
@@ -198,16 +242,19 @@ class AgenciesController extends Controller
      */
     public function destroy($id)
     {
-        $imgAgency = DB::table('agencies')
-            ->select('agencies.photo')
-            ->where('id_agency', 'LIKE', $id)
-            ->get();
-        Storage::disk('public')->delete($imgAgency[0]->photo);
 
-        DB::table('agencies')
-            ->where('id_agency', 'LIKE', $id)
-            ->delete();
 
-        return redirect('agencies');
+        if (Auth::check() && Auth::user()->role === 1) {
+            $imgAgency = DB::table('agencies')
+                ->select('agencies.photo')
+                ->where('id_agency', 'LIKE', $id)
+                ->get();
+            Storage::disk('public')->delete($imgAgency[0]->photo);
+
+            DB::table('agencies')
+                ->where('id_agency', 'LIKE', $id)
+                ->delete();
+            return redirect('admin/agencies');
+        } else abort(403);
     }
 }

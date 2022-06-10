@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -13,15 +14,25 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index', 'create', 'show');
+    }
+
     public function index()
     {
-        $orders = DB::table('orders')
-            ->join('vehicles', 'orders.id_vehicle', '=', 'vehicles.id_vehicle')
-            ->join('agencies', 'orders.id_agency', '=', 'agencies.id_agency')
-            ->join('members', 'orders.id_member', '=', 'members.id_member')
-            ->select('orders.*', 'agencies.title_agency as agency', 'members.nickname as name', 'members.email as email', 'vehicles.title as vehicle')
-            ->get();
-        return view('orders', compact('orders'));
+        if (Auth::check()) {
+            if (Auth::user()->role === 1) {
+                $orders = DB::table('orders')
+                    ->join('locations', 'orders.id_location', '=', 'locations.id_location')
+                    ->join('agencies', 'orders.id_agency', '=', 'agencies.id_agency')
+                    ->join('users', 'orders.id_user', '=', 'users.id')
+                    ->select('orders.*', 'agencies.title_agency as agency', 'users.name as name', 'users.email as email', 'locations.title_location as location')
+                    ->get();
+                return view('admin.orders', compact('orders'));
+            } else return abort(403);
+        } else return redirect('/login')->with('msg', 'Vous devez vous connecter');
     }
 
     /**

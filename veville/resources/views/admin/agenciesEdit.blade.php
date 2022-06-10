@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <h1>Edit agencies</h1>
     <form style="width: 25%;" class="container" action="" method="POST" enctype="multipart/form-data">
         @csrf
         <label for="name">Agency name:</label><br>
