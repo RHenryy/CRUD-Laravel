@@ -1,4 +1,4 @@
-# CRUD-Laravel
+# CRUD-Laravel avec Authentification et Permissions
 Création d'un crud à l'aide du framework Laravel avec système d'authentification et de permissions. 
 Basé sur un site de location d'appartements.
 
