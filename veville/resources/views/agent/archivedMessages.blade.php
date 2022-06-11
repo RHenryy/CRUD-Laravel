@@ -9,7 +9,8 @@
         <div class="flexAnnonces">
             @foreach ($messages as $message)
                 <div style="width:45%;" class="container mt-5 messages pt-4">
-                    <img class="mb-3" style="width:95%" src="{{ asset('storage/' . $message->photo) }}">
+                    <a href="/locations/show/{{ $message->id_location }}"><img class="mb-3" style="width:95%"
+                            src="{{ asset('storage/' . $message->photo) }}"></a>
                     <p class="message"><span style="color:red;">Id de location: </span>{{ $message->id_location }}
                     </p>
                     <p class="message"><span style="color:red;">Nom de l'appartement:
@@ -36,6 +37,7 @@
                             <textarea hidden id="messageUser" class="w-100 form-control" name="message" type="text" class="w-100 form-control">{{ $message->description }}</textarea>
                             <input type="text" hidden value="{{ $message->id_location }}" name="idLocation">
                             <input type="text" hidden value="{{ $message->id_agency }}" name="idAgency">
+                            <input type="text" hidden value="{{ $message->created_at }}" name="createdAt">
                         @endforeach
 
                     </form>
