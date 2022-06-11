@@ -98,6 +98,7 @@ Route::post('/home/edit/{id}', [App\Http\Controllers\HomeController::class, 'upd
 
 Route::get('/contact/{id}', [ContactController::class, 'index']);
 Route::post('/contact', [ContactController::class, 'store']);
+Route::get('/history', [ContactController::class, 'getHistory']);
 
 Auth::routes(['verify' => true]);
 
