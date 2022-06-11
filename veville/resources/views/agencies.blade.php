@@ -25,8 +25,8 @@
         <div class="flexAnnonces">
             @foreach ($agencies as $agency)
                 <div style="width:45%;" class="cardBackgroundColor pt-5 mb-5 m-3">
-                    <img class="rounded d-block mx-auto mb-2" style="width:80%;border:3px solid black"
-                        src="{{ Storage::url($agency->photo) }}">
+                    <a href="/agencies/show/{{ $agency->id_agency }}"><img class="rounded d-block mx-auto mb-2"
+                            style="width:80%;border:3px solid black" src="{{ Storage::url($agency->photo) }}"></a>
                     <p class="text-center h4 mt-3 mb-3"><strong> {{ $agency->title_agency }}</strong></p>
                     <p class="text-center h4 mt-3 mb-3"><strong> {{ $agency->city }} - {{ $agency->pc }} -
                             {{ $agency->address }}</strong></p>
