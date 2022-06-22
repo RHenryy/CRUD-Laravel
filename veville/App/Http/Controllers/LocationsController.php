@@ -150,7 +150,34 @@ class LocationsController extends Controller
             ->get();
 
         if (Auth::check() && Auth::user()->role === 3) {
-            return view('manager.locationsShow', compact('locations', 'images', 'contacts'));
+
+
+            $locations = DB::table('locations')
+                ->select('locations.*')
+                ->where('id_location', '=', $id)
+                ->get();
+
+            $images = DB::table('images')
+                ->join('locations', 'images.id_location', '=', 'locations.id_location')
+                ->select('images.*', 'locations.title_location')
+                ->where('images.id_location', '=', $id)
+                ->get();
+
+            $contacts = DB::table('agents')
+                ->join('locations', 'locations.id_location', '=', 'agents.id_location')
+                ->join('users', 'users.id', '=', 'agents.id_user')
+                ->join('agencies', 'agencies.id_agency', '=', 'agents.id_agency')
+                ->select('locations.*', 'agents.*', 'users.*', 'agencies.*')
+                ->where('agents.id_location', '=', $id)
+                ->get();
+
+            $managers = DB::table('managers')
+                ->select('managers.id_agency')
+                ->where('managers.id_user', Auth::user()->id)
+                ->get();
+
+
+            return view('manager.locationsShow', compact('locations', 'images', 'contacts', 'managers'));
         }
 
         return view('locationsShow', compact('locations', 'images', 'contacts'));
