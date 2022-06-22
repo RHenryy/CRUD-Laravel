@@ -1,14 +1,18 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container mt-3">
+    <div class=" mt-0 container mt-2">
         <h2 style="color:green;font-weight:bold;text-align:center;">{{ session('msg') }}</h2><br />
-    </div>
-    <div class="container">
-        <h1 class="text-center">Vos messages envoyés</h1>
+
+        <h1 class="mt-0 mb-0 text-center">Vos messages envoyés</h1>
+        @if ($messages->isEmpty())
+            <h3 class="mt-3 text-center" style="font-weight:bold;text-decoration: underline;">Pas de messages envoyés pour le
+                moment
+            </h3>
+        @endif
 
         <div class="flexAnnonces">
             @foreach ($messages as $message)
-                <div style="width:45%;" class="container mt-5 messages pt-4">
+                <div style="width:45%;" class="mt-5 pt-4">
                     <p><a href="/locations/show/{{ $message->id_location }}"><img
                                 style="width: 90%;height:250px;cursor:pointer;"
                                 src="{{ Storage::url($message->photo) }}"></a></p>
@@ -21,5 +25,4 @@
             @endforeach
 
         </div>
-    </div>
-@endsection
+    @endsection

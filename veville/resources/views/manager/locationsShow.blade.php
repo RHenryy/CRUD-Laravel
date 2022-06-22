@@ -25,7 +25,6 @@
                     </h5>
                 @endforeach
             </ul>
-            <a href="/manager/agents" class="btn btn-dark">Gérer les agents</a>
         </div>
 
 
