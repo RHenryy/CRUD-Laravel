@@ -55,6 +55,24 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::post('/agents/store', [AgentsController::class, 'store']);
 });
 
+Route::prefix('manager')->middleware(['auth', 'isManager'])->group(function () {
+    Route::get('/agency/messages/{id}', [ContactController::class, 'showManagerMessages']);
+
+    Route::get('/agencies', [AgenciesController::class, 'index']);
+    Route::post('/agencies/edit/{id}', [AgenciesController::class, 'update']);
+
+    Route::get('/locations', [LocationsController::class, 'index']);
+    Route::get('/locations/show/{id}', [LocationsController::class, 'showAppartment']);
+
+    Route::get('/agents', [AgentsController::class, 'index']);
+    Route::post('/agents', [AgentsController::class, 'store']);
+    Route::get('/agents/delete/{id}', [AgentsController::class, 'destroy']);
+    Route::get('/agents/assign', [AgentsController::class, 'assignAgent']);
+
+    Route::get('/pictures/{id}', [ImagesController::class, 'index']);
+    Route::post('/pictures/{id}', [ImagesController::class, 'store']);
+});
+
 Route::prefix('agent')->middleware(['auth', 'isAgent'])->group(function () {
 
     Route::get('/agencies/edit/{id}', [AgenciesController::class, 'edit']);
@@ -82,6 +100,7 @@ Route::prefix('agent')->middleware(['auth', 'isAgent'])->group(function () {
     Route::post('/messages/archive/{id}', [ContactController::class, 'archiveMessage']);
     Route::get('/messages/archives/{id}', [ContactController::class, 'showArchives']);
     Route::post('/messages/restore/{id}', [ContactController::class, 'restore']);
+    Route::get('/messages/delete/{id}', [ContactController::class, 'delete']);
 });
 
 Route::get('/', [IndexController::class, 'index']);
@@ -98,6 +117,8 @@ Route::post('/home/edit/{id}', [App\Http\Controllers\HomeController::class, 'upd
 
 Route::get('/contact/{id}', [ContactController::class, 'index']);
 Route::post('/contact', [ContactController::class, 'store']);
+Route::get('/history', [ContactController::class, 'getHistory']);
+Route::post('/contact/agencies/{id}', [ContactController::class, 'contactAgency']);
 
 Auth::routes(['verify' => true]);
 

@@ -111,9 +111,16 @@ img {
         opacity: 1;
         z-index: 3;
         padding: 2rem;
+    
         
 }
 
 .unscrollable {
     overflow: hidden;
 }
+
+.carouselContainer {
+    max-width: 10%;
+    margin: 0 auto;
+}
+

@@ -24,7 +24,7 @@ class LocationsController extends Controller
     public function index()
     {
 
-        if (Auth::check() && Auth::user()->role == 1) {
+        if (Auth::check() && Auth::user()->role === 1) {
             $agencies = Agencies::all();
             $locations = DB::table('locations')
                 ->join('agencies', 'locations.id_agency', '=', 'agencies.id_agency')
@@ -41,6 +41,28 @@ class LocationsController extends Controller
                 ->where('agents.id_user', '=', Auth::user()->id)
                 ->get();
             return view('agent.locations', compact('agents'));
+        } elseif (Auth::check() && Auth::user()->role === 3) {
+            $manager = DB::table('managers')
+                ->select('managers.id_agency')
+                ->where('managers.id_user', '=', Auth::user()->id)
+                ->get();
+            $manager = json_decode(json_encode($manager), true);
+
+
+            $locations = DB::table('locations')
+                ->join('agencies', 'locations.id_agency', '=', 'agencies.id_agency')
+                ->join('agents', 'agents.id_location', '=', 'locations.id_location')
+                ->select('locations.*', 'agencies.city as city', 'agencies.title_agency as agency', 'agents.id_location as id_loc')
+                ->where('agencies.id_agency', '=', $manager)
+                ->groupBy('locations.id_location')
+                ->get();
+
+
+
+
+
+
+            return view('manager.locations', compact('locations'));
         } else {
 
             $agencies = Agencies::all();
@@ -127,7 +149,9 @@ class LocationsController extends Controller
             ->where('agents.id_location', '=', $id)
             ->get();
 
-
+        if (Auth::check() && Auth::user()->role === 3) {
+            return view('manager.locationsShow', compact('locations', 'images', 'contacts'));
+        }
 
         return view('locationsShow', compact('locations', 'images', 'contacts'));
     }

@@ -9,7 +9,8 @@
         <div class="flexAnnonces">
             @foreach ($messages as $message)
                 <div style="width:45%;" class="container mt-5 messages pt-4">
-                    <img class="mb-3" style="width:95%" src="{{ asset('storage/' . $message->photo) }}">
+                    <a href="/locations/show/{{ $message->id_location }}"><img class="mb-3" style="width:95%"
+                            src="{{ asset('storage/' . $message->photo) }}"></a>
                     <p class="message"><span style="color:red;">Id de location: </span>{{ $message->id_location }}
                     </p>
                     <p class="message"><span style="color:red;">Nom de l'appartement:
@@ -26,7 +27,7 @@
                         action="/agent/messages/restore/{{ $message->id_booking }}" class="group-form">
                         @csrf
 
-                        <input type="submit" class="w-50 mt-2 btn btn-danger" value="Restaurer Message">
+                        <input type="submit" class="w-50 mt-2 btn btn-primary" value="Restaurer Message">
                         @foreach ($messages as $message)
                             <input hidden name="agent_id" value="{{ $message->user_id }}">
                             <input hidden id="username" name="name" type="text" class="w-100 form-control"
@@ -36,8 +37,10 @@
                             <textarea hidden id="messageUser" class="w-100 form-control" name="message" type="text" class="w-100 form-control">{{ $message->description }}</textarea>
                             <input type="text" hidden value="{{ $message->id_location }}" name="idLocation">
                             <input type="text" hidden value="{{ $message->id_agency }}" name="idAgency">
+                            <input type="text" hidden value="{{ $message->created_at }}" name="createdAt">
                         @endforeach
-
+                        <a class="btn btn-danger w-50" href="/agent/messages/delete/{{ $message->id_booking }}">Supprimer
+                            définitivement</a>
                     </form>
                     {{-- <a href="/agent/messages/archive/{{ $message->id_booking }}"><button type="button" class="btn btn-danger w-25">Archiver Message</button></a> --}}
 

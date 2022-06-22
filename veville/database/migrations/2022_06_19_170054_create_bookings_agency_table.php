@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('archive_bookings', function (Blueprint $table) {
-            $table->id('id_booking');
-            $table->foreignId('id_agent')->references('id_agent')->on('agents')->onDelete('cascade');
+        Schema::create('bookings_agency', function (Blueprint $table) {
+            $table->id('id_bookingsAgency');
             $table->foreignId('id_agency')->references('id_agency')->on('agencies')->onDelete('cascade');
-            $table->foreignId('id_location')->references('id_location')->on('locations')->onDelete('cascade');
             $table->foreignId('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->string('email');
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('archive_bookings');
+        Schema::dropIfExists('bookings_agency');
     }
 };

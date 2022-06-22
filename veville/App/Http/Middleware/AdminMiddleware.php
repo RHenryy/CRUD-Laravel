@@ -16,17 +16,12 @@ class AdminMiddleware
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
-    {   
-        if (Auth::check())
-        {
-            if (Auth::user()->role == 1) {
+    {
+        if (Auth::check()) {
+            if (Auth::user()->role === 1) {
 
                 return $next($request);
-                
-            }   else return abort(403);
-
+            } else return abort(403);
         } else return redirect('/login')->with('msg', 'Vous devez être connecté pour accéder à cette page');
-        
-        return $next($request);
     }
 }

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="product">
-
-        <p> {{ $locations[0]->title_location }} - Loyer de {{ $locations[0]->rent_price }}€ tcc </p>
+    <div class="container">
+        <h2 class="mb-4 text-center"> {{ $locations[0]->title_location }} - Loyer de {{ $locations[0]->rent_price }}€ tcc
+        </h2>
         <div style="text-align:center">
             @if (!$contacts->isEmpty())
                 <a id="showModal" style="width:20%;padding:0.5rem;" class="btn btn-dark">Prenez rendez-vous maintenant !</a>
@@ -15,20 +15,31 @@
                     d'informations</a>
             @endif
         </div>
+        <div class="mt-4 w-75 m-auto">
+            <h3>Agents assignés à la location :</h3>
+            <ul style="margin-left:0.5rem;">
+                @foreach ($contacts as $contact)
+                    <h5>
+                        <li>{{ $contact->name }} - <a href="mail:to{{ $contact->email }}">{{ $contact->email }}</a>
+                        </li>
+                    </h5>
+                @endforeach
+            </ul>
+        </div>
 
 
-
-        <div id="myCarousel" class="carousel slide container mb-3 mt-5 w-50" data-bs-ride="carousel"
+        <div id="myCarousel" class="carousel slide container mb-3 mt-5 w-75" data-bs-ride="carousel"
             data-bs-interval="false">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img style="height:450;" class="d-block w-100" src="{{ asset('storage/' . $locations[0]->photo) }}"
+                    <img style="height:450px;" class="d-block w-100" src="{{ asset('storage/' . $locations[0]->photo) }}"
                         alt="{{ $locations[0]->title_location }}">
                 </div>
 
+
                 @foreach ($images as $image)
                     <div class="carousel-item">
-                        <img style="450px;" class="d-block w-100" src="{{ asset('storage/' . $image->src) }}"
+                        <img style="height:450px;" class="d-block w-100" src="{{ asset('storage/' . $image->src) }}"
                             alt="{{ $image->title_location }}">
                     </div>
                 @endforeach

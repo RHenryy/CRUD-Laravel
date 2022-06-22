@@ -18,7 +18,7 @@ class AgenciesController extends Controller
 
     public function index()
     {
-        if (Auth::check() && Auth::user()->role == 1) {
+        if (Auth::check() && Auth::user()->role === 1) {
             $agencies = Agencies::all();
 
             $city = DB::table('agencies')
@@ -30,7 +30,7 @@ class AgenciesController extends Controller
             return view('admin.agencies', compact('agencies', 'city', 'autofill'));
         }
 
-        if (Auth::check() && Auth::user()->role == 2) {
+        if (Auth::check() && Auth::user()->role === 2) {
             $agencies = DB::table('agencies')
                 ->join('agents', 'agents.id_agency', '=', 'agencies.id_agency')
                 ->join('users', 'users.id', '=', 'agents.id_user')
@@ -39,6 +39,16 @@ class AgenciesController extends Controller
                 ->get();
 
             return view('agent.agencies', compact('agencies'));
+        }
+
+        if (Auth::check() && Auth::user()->role === 3) {
+            $agencies = DB::table('agencies')
+                ->join('managers', 'managers.id_agency', 'agencies.id_agency')
+                ->select('agencies.*')
+                ->where('managers.id_user', '=', Auth::user()->id)
+                ->get();
+
+            return view('manager.agencies', compact('agencies'));
         }
 
         $agencies = Agencies::all();
@@ -146,7 +156,11 @@ class AgenciesController extends Controller
             ->select('agencies.*')
             ->where('agencies.id_agency', 'LIKE', $id)
             ->get();
-        return view('agenciesList', compact('agencies'));
+        $managers = DB::table('managers')
+            ->select('managers.*')
+            ->where('managers.id_agency', '=', $id)
+            ->get();
+        return view('agenciesList', compact('agencies', 'managers'));
     }
 
 
@@ -178,10 +192,7 @@ class AgenciesController extends Controller
                 ->get();
 
             return view('admin.agenciesEdit', compact('agencies'));
-        }
-
-        else abort(403);
-
+        } else abort(403);
     }
 
     /**
@@ -231,6 +242,8 @@ class AgenciesController extends Controller
             return redirect('/admin/agencies')->with('msg', "L'annonce a bien été modifiée!");
         } elseif (Auth::check() && Auth::user()->role === 2) {
             return redirect('/agent/agencies')->with('msg', "L'annonce a bien été modifiée!");
+        } elseif (Auth::check() && Auth::user()->role === 3) {
+            return redirect('/manager/agencies')->with('msg', "L'annonce a bien été modifiée !");
         }
     }
 

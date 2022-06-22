@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreignId('id_agency')->references('id_agency')->on('agencies')->onDelete('cascade');
             $table->foreignId('id_location')->references('id_location')->on('locations')->onDelete('cascade');
             $table->foreignId('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->string('name');
+            $table->string('email');
+            $table->string('message');
             $table->timestamps();
         });
     }

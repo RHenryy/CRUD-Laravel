@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AgentMiddleware
+class ManagerMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,10 +18,10 @@ class AgentMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            if (Auth::user()->role === 2) {
+            if (Auth::user()->role === 3) {
+
                 return $next($request);
-            } else abort(403);
-        }
-        return redirect('/logion', 'Vous devez vous connecter');
+            } else return abort(403);
+        } else return redirect('/login')->with('msg', 'Vous devez être connecté pour accéder à cette page');
     }
 }

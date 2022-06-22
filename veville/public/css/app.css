@@ -11383,3 +11383,8 @@ img {
 .unscrollable {
   overflow: hidden;
 }
+
+.carouselContainer {
+  max-width: 10%;
+  margin: 0 auto;
+}

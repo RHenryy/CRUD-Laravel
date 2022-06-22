@@ -32,9 +32,9 @@
     <link href="{{ asset('css/carousel.css') }}" rel="stylesheet">
 </head>
 
-<body class="mt-3">
+<body class="">
     <div id="">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm p-3">
             <div class="container">
                 {{-- <a class="navbar-brand" href="{{ url('/') }}">
                     Retour à nos locations
@@ -49,32 +49,51 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         @guest
-                            <li class="nav-item"><a class="navbar-brand" href="/">Toutes nos locations</a></li>
-                            <li class="nav-item"><a class="navbar-brand" href="/agencies">Nos agences</a></li>
-                            <li class="nav-item"><a class="navbar-brand" href="/locations">Nos appartments</a></li>
+                            <li class="nav-item link"><a class="navbar-brand" href="/">Toutes nos locations</a>
+                            </li>
+                            <li class="nav-item link"><a class="navbar-brand" href="/agencies">Nos agences</a></li>
+                            <li class="nav-item link"><a class="navbar-brand" href="/locations">Nos appartments</a></li>
                         @endguest
                         @if (Auth::user() && Auth::user()->role === 1)
-                            <li class="nav-item"><a class="navbar-brand" href="/">Toutes nos locations</a></li>
-                            <li class="nav-item"><a class="navbar-brand" href="/admin/agencies">Nos agences</a>
+                            <li class="nav-item link"><a class="navbar-brand" href="/">Toutes nos locations</a>
                             </li>
-                            <li class="nav-item"><a class="navbar-brand" href="/admin/locations">Nos
+                            <li class="nav-item link"><a class="navbar-brand" href="/admin/agencies">Nos agences</a>
+                            </li>
+                            <li class="nav-item link"><a class="navbar-brand" href="/admin/locations">Nos
                                     appartments</a>
                             </li>
                         @endif
+                        @if (Auth::check() && Auth::user()->role === 3)
+                            <li class="nav-item link"><a class="navbar-brand" href="/">Toutes nos locations</a>
+                            </li>
+                            <li class="nav-item link"><a class="navbar-brand" href="/manager/agencies">Votre
+                                    agence</a>
+                            <li class="nav-item link"><a class="navbar-brand" href="/manager/locations">Vos
+                                    annonces</a>
+                            </li>
+                            <li class="nav-item link"><a class="navbar-brand" href="/manager/agents">Vos
+                                    agents</a>
+                            </li>
+                            <li class="nav-item link"><a class="navbar-brand"
+                                    href="/manager/agency/messages/{{ Auth::user()->id }}">Messages
+                                    envoyés à l'agence</a></li>
+                        @endif
+
                         @if (Auth::check() && Auth::user()->role === 2)
-                            <li class="nav-item"><a class="navbar-brand" href="/">Toutes nos locations</a></li>
-                            <li class="nav-item"><a class="navbar-brand" href="/agent/agencies">Votre
+                            <li class="nav-item link"><a class="navbar-brand" href="/">Toutes nos locations</a>
+                            </li>
+                            <li class="nav-item link"><a class="navbar-brand" href="/agent/agencies">Votre
                                     agence</a>
                             </li>
-                            <li class="nav-item"><a class="navbar-brand" href="/agent/locations">Vos
+                            <li class="nav-item link"><a class="navbar-brand" href="/agent/locations">Vos
                                     annonces</a></li>
-                            <li class="nav-item"><a class="navbar-brand" href="/agent/messages/"
+                            <li class="nav-item link"><a class="navbar-brand" href="/agent/messages/"
                                     {{ Auth::user()->id }}>Vos Rendez-Vous</a></li>
                         @endif
-                        @if (Auth::user() && Auth::user()->role == 1)
-                            <li class="nav-item"><a class="navbar-brand" href="/admin/members">Les membres</a>
+                        @if (Auth::user() && Auth::user()->role === 1)
+                            <li class="nav-item link"><a class="navbar-brand" href="/admin/members">Les membres</a>
                             </li>
-                            <li class="nav-item"><a class="navbar-brand" href="/admin/orders">Orders</a></li>
+                            <li class="nav-item link"><a class="navbar-brand" href="/admin/orders">Orders</a></li>
                         @endif
 
                     </ul>
@@ -85,14 +104,14 @@
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <li class="nav-item link">
+                                    <a class="navbar-brand" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <li class="nav-item link">
+                                    <a class="navbar-brand" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                             {{-- <div id="nightmode">
@@ -138,7 +157,35 @@
         @yield('content')
     </main>
     </div>
+    <footer>
+        <div class="navbar navbar-expand-md navbar-light shadow-sm p-3 mt-3">
+            <ul class="navbar-nav me-auto">
+                <li class="link nav-item navbar-brand">Vous aussi souhaitez être référencé par notre site ? N'hésitez
+                    plus
+                    ! <a href="mailto:veville@veville.com" class="text-white">Contactez-nous !</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item navbar-brand"><a class="fa-brands fa-instagram fa-2x" href=""></a>
+                </li>
+                <li class="nav-item navbar-brand"><a class="fa-brands fa-facebook fa-2x" href=""></a>
+                </li>
+                <li class="nav-item navbar-brand"><a class="fa-brands fa-twitter fa-2x" href=""></a>
+                </li>
+            </ul>
+            <ul class="removeDot me-auto">
+                <li><a class="externalLinks navbar-brand" href="">Nos valeurs</a></li>
+                <li><a class="externalLinks navbar-brand" href="">Notre parcours</a></li>
+                <li><a class="externalLinks navbar-brand" href="">Nos partenaires</a></li>
+            </ul>
 
+        </div>
+        <div>
+            <ul class="navbar-nav m-auto fw-bold">
+                <li class="nav-item navbar-brand m-auto">© 2022 Veville. All rights reserved.</li>
+            </ul>
+        </div>
+    </footer>
 </body>
 
 </html>

@@ -41,3 +41,7 @@ body,
 .item:nth-child(3) {
   background: #E46653;
 }
+
+#carousel {
+  z-index: -1 !important;
+}

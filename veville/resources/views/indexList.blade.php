@@ -18,7 +18,7 @@
 
             <div class="flexAnnonces">
                 @foreach ($locations as $location)
-                    <div style="width:45%;" class="cardBackgroundColor pt-5 mb-5 m-3">
+                    <div style="width:45%;" class="pt-5 mb-5 m-3">
                         <img class="rounded d-block mx-auto mb-2" style="width:90%;border:3px solid black;height:250px;"
                             src="{{ Storage::url($location->photo) }}">
                         <p class="text-center h4 mt-3 mb-3"><strong>{{ $location->city }} -
@@ -26,7 +26,7 @@
                                 {{ $location->rent_price }}€/mois</strong></p>
                         <div class="text-center">
                             <a href="/locations/show/{{ $location->id_location }}"
-                                class="text-center mb-5 btn btn-primary btn-block p-3">Louez dès maintenant!</a>
+                                class="text-center mb-5 btn btn-dark btn-block p-1">Louez dès maintenant!</a>
                         </div>
                     </div>
                 @endforeach
