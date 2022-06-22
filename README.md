@@ -2,11 +2,13 @@
 Création d'un crud à l'aide du framework Laravel avec système d'authentification et de permissions. 
 Basé sur un site de location d'appartements.
 
-Différents status : admin, agents, et utilisateurs. 
+Différents status : admin, manager, agents, et utilisateurs. 
 
 Chaque statut a accès à des blades différentes. Les blades sont sécurisées, et une personne n'ayant pas le statut nécessaire tombera sur une erreur 403 avant d'être redirigée.
 
 Les admins ont accès à toutes les fonctionnalités, telles que l'ajout d'agences, la suppression d'annonces, la gestion des membres et le statut de ces derniers... Mais n'ont pas accès aux messages privés des agents.
+
+Les managers ont accès uniquement à leur propre agence, mais peuvent modifier les informations de cette dernière. Ils ont également accès à toutes les annonces de leur agence, et peuvent voir quels agents sont assignés aux différentes annonces. Ils peuvent également ajouter, modifier et supprimer des annonces. De plus, les managers ont la possiblité de créer des comptes agents, et d'assigner des comptes existants (si la foreignkey id_agency est la même que celle du manager) aux différentes locations.
 
 Les agents ne peuvent pas intéragir avec les agences, mais peuvent gérer leurs propres annonces de location, bien qu'ils ne puissent pas les supprimer. Ils peuvent gérer plusieurs locations en même temps s'ils ont les droits. 
 Ils ont également accès aux pages "messages", qui contiendront les demandes de rendez-vous envoyés par les potentiels clients. Les agents peuvent les consulter, et décider de les archiver. Une fois archivés, ces messages sont supprimés de la base de donnée principale, et copier dans une autre. Les agents peuvent accéder aux archives et consulter les anciens messages, et décider, s'ils le souhaitent, de les restaurer. Dans ce cas, ce sera simplement le processus inverse qui aura lieu. 
