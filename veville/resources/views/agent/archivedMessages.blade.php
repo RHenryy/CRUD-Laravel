@@ -27,7 +27,7 @@
                         action="/agent/messages/restore/{{ $message->id_booking }}" class="group-form">
                         @csrf
 
-                        <input type="submit" class="w-50 mt-2 btn btn-primary" value="Restaurer Message">
+                        <input type="submit" class="w-50 mt-2 btn btn-danger" value="Restaurer Message">
                         @foreach ($messages as $message)
                             <input hidden name="agent_id" value="{{ $message->user_id }}">
                             <input hidden id="username" name="name" type="text" class="w-100 form-control"
@@ -39,8 +39,7 @@
                             <input type="text" hidden value="{{ $message->id_agency }}" name="idAgency">
                             <input type="text" hidden value="{{ $message->created_at }}" name="createdAt">
                         @endforeach
-                        <a class="btn btn-danger w-50" href="/agent/messages/delete/{{ $message->id_booking }}">Supprimer
-                            définitivement</a>
+
                     </form>
                     {{-- <a href="/agent/messages/archive/{{ $message->id_booking }}"><button type="button" class="btn btn-danger w-25">Archiver Message</button></a> --}}
 
